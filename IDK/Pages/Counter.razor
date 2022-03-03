@@ -1,0 +1,136 @@
+﻿@page "/counter"
+
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Uhadni cislo...</title>
+</head>
+
+<body>
+    <h1>Hadac cisel</h1>
+
+
+    <input @bind-value=HodnotaInput type="number" @onkeypress="@Enter" @onkeydown="N" />
+
+    <button class="btn btn-primary" @onclick="VymysliCislo">Vymysli cislo</button>
+    <button class="btn btn-primary" @onclick="IncrementCount">Hadej</button>
+
+    <button class="btn btn-primary" @onclick="Clicked">Zobraz reseni</button>
+    <!--
+        <h1>Hadac cisel</h1>
+       <a class="btn btn-info" href="/">Domu</a>
+
+          <p>
+        Selected Cars: @string.Join(", ", cisla)
+
+        </p>
+
+    -->
+    @if (click == true)
+    {
+        <p>Správné řešení je: @cislo</p>
+        click = false;
+    }
+
+
+    <p>
+        Pozita cisla: @string.Join(", ", cisla_list)
+    </p>
+
+
+
+    @if (@currentCount == "vetsi")
+    {
+        <p style="color:yellow"> Cislo je? @currentCount </p>
+    }
+
+    @if (@currentCount == "mensi")
+    {
+        <p style="color:red"> Cislo je? @currentCount </p>
+    }
+
+    @if (@currentCount == "uhadl jsi cislo")
+    {
+        <p style="color:green"> Cislo je? @currentCount </p>
+        cisla_list.Clear();
+    }
+
+
+</body>
+
+</html>
+
+
+@code {
+    string currentCount;
+
+    int HodnotaInput;
+    int cislo;
+    bool click = false;
+
+    int[] cisla = new int[50];
+    public List<int> cisla_list = new List<int>();
+
+    int counter = 0;
+
+    void VymysliCislo()
+    {
+        Random rnd = new Random();
+        cislo = rnd.Next(0, 100);
+
+    }
+
+    void IncrementCount()
+    {
+
+        if (cislo > HodnotaInput)
+        {
+            currentCount = "vetsi";
+        }
+
+        if (cislo < HodnotaInput)
+        {
+            currentCount = "mensi";
+        }
+
+        if (cislo == HodnotaInput)
+        {
+
+            currentCount = "uhadl jsi cislo";
+
+        }
+    }
+
+
+
+    void Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            IncrementCount();
+
+            cisla[counter] = HodnotaInput;
+            
+            cisla_list.Add(HodnotaInput);
+
+            counter++;
+        }
+    }
+
+    void N(KeyboardEventArgs e)
+    {
+        if (e.Key == "N")
+        {
+            VymysliCislo();
+        }
+    }
+
+    void Clicked()
+    {
+        click = true;
+    }
+
+}
+
